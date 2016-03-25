@@ -5,7 +5,7 @@
     name: '{{ item }}'
     state: 'latest'
     install_recommends: False
-  with_items: rsyslog_packages
+  with_items: '{{ rsyslog_packages }}'
   when: rsyslog_packages is defined and rsyslog_packages
   notify: [ 'Restart rsyslogd' ]
 
