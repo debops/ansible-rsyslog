@@ -9,7 +9,7 @@
     - '{{ rsyslog__base_packages }}'
     - '{{ rsyslog__tls_packages if rsyslog__pki|bool else [] }}'
     - '{{ rsyslog__packages }}'
-  when: rsyslog__enabled|bool
+  when: rsyslog__enabled|bool and ansible_os_family == 'Debian'
 
 - name: Create required system group
   group:
@@ -55,7 +55,7 @@
   command: dpkg-divert --quiet --local --divert /etc/rsyslog.conf.dpkg-divert --rename /etc/rsyslog.conf
   args:
     creates: '/etc/rsyslog.conf.dpkg-divert'
-  when: rsyslog__enabled|bool
+  when: rsyslog__enabled|bool and ansible_os_family == 'Debian'
   notify: [ 'Restart rsyslogd' ]
 
 - name: Generate main rsyslog configuration
