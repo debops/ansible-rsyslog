@@ -34,6 +34,7 @@
 - name: Fix directory permissions if needed
   file:
     path: '/var/spool/rsyslog'
+    state: 'directory'
     owner: '{{ rsyslog__user }}'
     group: '{{ rsyslog__file_group }}'
     mode: '0700'
