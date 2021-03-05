@@ -1,4 +1,24 @@
 ---
+- name: check apparmor rule
+  stat:
+    path: "{{ rsyslog__apparmor_rules_path }}{{ rsyslog__apparmor_rule_name }}"
+  register: rsyslog_apparmor_rule
+
+- name: disable apparmor rule
+  block:
+    - name: link rule to disable
+      file:
+        src: "{{ rsyslog__apparmor_rules_path }}{{ rsyslog__apparmor_rule_name }}"
+        path: "{{ rsyslog__apparmor_rules_path }}disable/{{ rsyslog__apparmor_rule_name }}"
+        state: link
+
+    - name: reload all profiles
+      systemd:
+        name: 'apparmor'
+        state: 'reloaded'
+
+  # end block
+  when: (rsyslog_apparmor_rule is defined and rsyslog_apparmor_rule.stat.exists)
 
 - name: Install required packages
   apt:
@@ -34,6 +54,7 @@
 - name: Fix directory permissions if needed
   file:
     path: '/var/spool/rsyslog'
+    state: 'directory'
     owner: '{{ rsyslog__user }}'
     group: '{{ rsyslog__file_group }}'
     mode: '0700'
