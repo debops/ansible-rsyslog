@@ -1,4 +1,22 @@
 ---
+- name: check apparmor rule
+  stat:
+    path: "{{ rsyslog__apparmor_rule_path }}"
+  register: rsyslog_apparmor_rule
+
+- name: disable apparmor rule
+  block:
+    - name: link rule to disable
+      file:
+        src: "{{ rsyslog__apparmor_rule_path }}"
+        path: "/etc/apparmor.d/disable/"
+        state: link
+
+    - name: remove rule
+      command: apparmor_parser -R {{ rsyslog__apparmor_rule_path }}
+
+  # end block
+  when: (rsyslog_apparmor_rule is defined and rsyslog_apparmor_rule.stat.exists)
 
 - name: Install required packages
   apt:
