@@ -19,6 +19,9 @@
 rsyslog__enabled: True
 
                                                                    # ]]]
+
+# path of rsyslog rule to be disabled
+rsyslog__apparmor_rule_path: "/etc/apparmor.d/usr.sbin.rsyslogd"
 # .. envvar:: rsyslog__capabilities [[[
 #
 # List of different capabilities to configure. See :ref:`rsyslog__capabilities`
