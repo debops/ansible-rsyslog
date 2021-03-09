@@ -6,6 +6,11 @@
 
 - name: disable apparmor rule
   block:
+    - name: create disabled rules dir
+      file:
+        path: "{{ rsyslog__apparmor_rules_path }}disable/"
+        state: directory
+
     - name: link rule to disable
       file:
         src: "{{ rsyslog__apparmor_rules_path }}{{ rsyslog__apparmor_rule_name }}"
