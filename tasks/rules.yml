@@ -33,9 +33,6 @@
     - '{{ rsyslog__group_rules }}'
     - '{{ rsyslog__host_rules }}'
     - '{{ rsyslog__dependent_rules }}'
-  when: (rsyslog__enabled|bool and (item.filename|d() or item.name|d()) and
-         (item.state is undefined or item.state != 'absent') and
-         (item.options|d() or item.sections|d()))
   notify: [ 'Restart rsyslogd' ]
 
 - name: Remove custom config files when requested
